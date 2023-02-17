@@ -9,52 +9,12 @@ export const DeliveriesTable = ({
 }: {
   formik: FormikProps<delivery>;
 }) => {
-  const [isEdit, isOpened, setIsOpened, setIsEdit, deliveries, setDeliveries] =
-    useContext<any>(DeliveriesContext);
+  const [isOpened, setIsOpened, isEdit, setIsEdit, deliveries, setDeliveries] =
+    useContext(DeliveriesContext);
 
-  const rows = deliveries?.map((delivery: delivery) => (
-    <tr key={delivery.id}>
-      <td width={250}>{delivery.orderNumber}</td>
-      <td>{delivery.status}</td>
-      <td width={150}>
-        <Flex justify="flex-end">
-          <Button
-            onClick={() => {
-              setIsEdit(true);
-              setIsOpened(true);
+  console.log(deliveries, "Context test");
+  console.log(setIsOpened, "setIsOpened test");
 
-              // prepopulate edit form with values
-              formik.setValues({
-                id: delivery.id,
-                orderNumber: delivery.orderNumber,
-                status: delivery.status,
-              });
-            }}
-            variant="light"
-            size="xs"
-            mr={5}
-          >
-            Edit
-          </Button>
-          <Button
-            onClick={() => {
-              const filteredArr = deliveries.filter(
-                (elm: delivery) => elm.id !== delivery.id
-              );
-
-              localStorage.setItem("deliveries", JSON.stringify(filteredArr));
-              setDeliveries(filteredArr);
-            }}
-            color="red"
-            variant="light"
-            size="xs"
-          >
-            Delete
-          </Button>
-        </Flex>
-      </td>
-    </tr>
-  ));
   return (
     <Table striped>
       <thead>
@@ -64,7 +24,54 @@ export const DeliveriesTable = ({
           <th> </th>
         </tr>
       </thead>
-      <tbody>{rows}</tbody>
+      <tbody>
+        {deliveries?.map((delivery: delivery) => (
+          <tr key={delivery.id}>
+            <td width={250}>{delivery.orderNumber}</td>
+            <td>{delivery.status}</td>
+            <td width={150}>
+              <Flex justify="flex-end">
+                <Button
+                  onClick={() => {
+                    setIsEdit(true);
+                    setIsOpened(true);
+
+                    // prepopulate edit form with values
+                    formik.setValues({
+                      id: delivery.id,
+                      orderNumber: delivery.orderNumber,
+                      status: delivery.status,
+                    });
+                  }}
+                  variant="light"
+                  size="xs"
+                  mr={5}
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => {
+                    const filteredArr = deliveries.filter(
+                      (elm: delivery) => elm.id !== delivery.id
+                    );
+
+                    localStorage.setItem(
+                      "deliveries",
+                      JSON.stringify(filteredArr)
+                    );
+                    setDeliveries(filteredArr);
+                  }}
+                  color="red"
+                  variant="light"
+                  size="xs"
+                >
+                  Delete
+                </Button>
+              </Flex>
+            </td>
+          </tr>
+        ))}
+      </tbody>
     </Table>
   );
 };
